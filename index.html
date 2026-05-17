@@ -25,18 +25,18 @@
            ========================================================================== */
         :root {
             /* Colors */
-            --color-bg-base: #030407;
-            --color-bg-surface: rgba(255, 255, 255, 0.02);
-            --color-text-primary: #ffffff;
-            --color-text-secondary: rgba(255, 255, 255, 0.6);
+            --color-bg-base: #f8f9fa;
+            --color-bg-surface: rgba(0, 0, 0, 0.02);
+            --color-text-primary: #1a1a1c;
+            --color-text-secondary: rgba(26, 26, 28, 0.65);
             --color-accent-blue: #2979ff;
             --color-accent-blue-light: #5c9aff;
-            --color-accent-cyan: #00e5ff;
+            --color-accent-cyan: #00bcd4;
             
             /* Glassmorphism */
-            --glass-bg: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --glass-border-hover: rgba(255, 255, 255, 0.2);
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(0, 0, 0, 0.08);
+            --glass-border-hover: rgba(0, 0, 0, 0.15);
             
             /* Typography */
             --font-family-base: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", "Segoe UI", "Hiragino Kaku Gothic ProN", "Hiragino Sans", Arial, sans-serif;
@@ -83,7 +83,7 @@
             height: 100vh;
             z-index: -1;
             overflow: hidden;
-            background: radial-gradient(circle at center, #0a0c14 0%, #030407 100%);
+            background: radial-gradient(circle at center, #ffffff 0%, #edf2f7 100%);
         }
 
         .orb {
@@ -156,7 +156,7 @@
         }
 
         .text-gradient {
-            background: linear-gradient(135deg, #ffffff 0%, rgba(255,255,255,0.7) 100%);
+            background: linear-gradient(135deg, #1a1a1c 0%, rgba(26,26,28,0.7) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -263,7 +263,7 @@
 
         .btn-secondary:hover {
             border-color: var(--color-text-secondary);
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(0, 0, 0, 0.03);
             transform: translateY(-2px);
         }
 
@@ -323,8 +323,8 @@
             width: 100%;
             max-width: 600px;
             border-radius: 16px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 30px rgba(41, 121, 255, 0.2);
-            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15), 0 0 30px rgba(41, 121, 255, 0.1);
+            border: 1px solid rgba(0,0,0,0.05);
             transform: perspective(1000px) rotateY(-8deg) rotateX(4deg);
             transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
@@ -355,7 +355,7 @@
         .scroll-indicator .line {
             width: 1px;
             height: 40px;
-            background: linear-gradient(to bottom, #ffffff, transparent);
+            background: linear-gradient(to bottom, #1a1a1c, transparent);
         }
 
         @keyframes bounce {
@@ -440,7 +440,7 @@
             font-family: var(--font-family-display);
             font-size: 3rem;
             font-weight: 800;
-            color: rgba(255,255,255,0.1);
+            color: rgba(0,0,0,0.06);
             line-height: 1;
             margin-bottom: auto;
         }
@@ -477,9 +477,10 @@
         }
 
         .comp-window {
-            background: #0a0c14;
+            background: #ffffff;
             border-radius: 16px;
-            border: 1px solid rgba(255,255,255,0.05);
+            border: 1px solid rgba(0,0,0,0.08);
+            box-shadow: 0 4px 24px rgba(0,0,0,0.04);
             overflow: hidden;
             height: 300px;
             display: flex;
@@ -488,8 +489,8 @@
 
         .window-header {
             height: 32px;
-            background: rgba(255,255,255,0.03);
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            background: rgba(0,0,0,0.02);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
             display: flex;
             align-items: center;
             padding: 0 16px;
@@ -500,7 +501,7 @@
             width: 10px;
             height: 10px;
             border-radius: 50%;
-            background: rgba(255,255,255,0.2);
+            background: rgba(0,0,0,0.15);
         }
 
         .window-body {
@@ -515,34 +516,34 @@
 
         /* Before Style */
         .comp-side.before .window-body {
-            color: rgba(255,255,255,0.3);
+            color: rgba(0,0,0,0.4);
             font-family: serif;
         }
         
         .comp-side.before .mock-title {
             width: 60%;
             height: 24px;
-            background: rgba(255,255,255,0.1);
+            background: rgba(0,0,0,0.06);
             margin-bottom: 16px;
         }
 
         .comp-side.before .mock-text {
             width: 80%;
             height: 12px;
-            background: rgba(255,255,255,0.05);
+            background: rgba(0,0,0,0.04);
             margin-bottom: 8px;
         }
 
         /* After Style */
         .comp-side.after .window-body {
-            background: linear-gradient(135deg, rgba(41, 121, 255, 0.05) 0%, rgba(0, 229, 255, 0.05) 100%);
+            background: linear-gradient(135deg, rgba(41, 121, 255, 0.05) 0%, rgba(0, 188, 212, 0.05) 100%);
         }
 
         .comp-side.after .mock-title {
             font-size: 1.5rem;
             font-weight: 700;
             margin-bottom: 16px;
-            color: #fff;
+            color: #1a1a1c;
             letter-spacing: 0.05em;
         }
 
@@ -557,9 +558,9 @@
             width: 80px;
             height: 80px;
             border-radius: 12px;
-            background: rgba(255,255,255,0.1);
+            background: rgba(0,0,0,0.03);
             backdrop-filter: blur(5px);
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid rgba(0,0,0,0.08);
         }
 
         .comp-arrow {
@@ -602,7 +603,8 @@
 
         .target-item:hover {
             transform: translateX(10px);
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(0, 0, 0, 0.02);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.04);
         }
 
         .check-icon {
@@ -712,8 +714,7 @@
                         ホームページ制作は劇的に変わる。
                     </p>
                     <div class="btn-group">
-                        <a href="#about" class="btn btn-primary"><span>教材を見る</span></a>
-                        <a href="#" class="btn btn-secondary">noteで読む</a>
+                        <a href="https://note.com/tender_lemur2930/n/na5fc750df837" class="btn btn-primary" target="_blank" rel="noopener noreferrer"><span>noteで読む</span></a>
                     </div>
                 </div>
                 <div class="hero-image-wrapper fade-in-up" style="transition-delay: 0.2s;">
@@ -899,8 +900,8 @@
                         <span class="text-accent">“AIに伝える力”。</span>
                     </h2>
                     <div class="btn-group" style="justify-content: center; margin-top: 56px;">
-                        <a href="#" class="btn btn-primary" style="padding: 20px 60px; font-size: 1.2rem;">
-                            <span>今すぐ教材を見る</span>
+                        <a href="https://note.com/tender_lemur2930/n/na5fc750df837" class="btn btn-primary" style="padding: 20px 60px; font-size: 1.2rem;" target="_blank" rel="noopener noreferrer">
+                            <span>noteで読む</span>
                         </a>
                     </div>
                 </div>
