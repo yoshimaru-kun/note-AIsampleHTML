@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIでホームページを作りたい人の教科書 | AI時代のWeb制作</title>
+    <meta name="description" content="AIに「伝わる言葉」を学ぶだけで、ホームページ制作は劇的に変わる。プログラミング不要で高品質なサイトを作るためのAI時代の教科書。">
+    <style>
+        /* ==========================================================================
+           CSS Reset & Base
+           ========================================================================== */
+        :root {
+            /* Colors */
+            --color-bg-base: #030407;
+            --color-bg-surface: rgba(255, 255, 255, 0.02);
+            --color-text-primary: #ffffff;
+            --color-text-secondary: rgba(255, 255, 255, 0.6);
+            --color-accent-blue: #2979ff;
+            --color-accent-blue-light: #5c9aff;
+            --color-accent-cyan: #00e5ff;
+            
+            /* Glassmorphism */
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-border-hover: rgba(255, 255, 255, 0.2);
+            
+            /* Typography */
+            --font-family-base: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", "Segoe UI", "Hiragino Kaku Gothic ProN", "Hiragino Sans", Arial, sans-serif;
+            --font-family-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", "Segoe UI", "Hiragino Kaku Gothic ProN", "Hiragino Sans", Arial, sans-serif;
+            
+            /* Layout */
+            --container-width: 1024px;
+            --section-spacing: 160px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-family-base);
+            background-color: var(--color-bg-base);
+            color: var(--color-text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* ==========================================================================
+           Background & Ambient Effects
+           ========================================================================== */
+        .ambient-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+            background: radial-gradient(circle at center, #0a0c14 0%, #030407 100%);
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.4;
+            animation: float 20s infinite ease-in-out alternate;
+        }
+
+        .orb-1 {
+            top: -10%;
+            left: -10%;
+            width: 50vw;
+            height: 50vw;
+            background: rgba(41, 121, 255, 0.15);
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            bottom: -20%;
+            right: -10%;
+            width: 60vw;
+            height: 60vw;
+            background: rgba(0, 229, 255, 0.1);
+            animation-delay: -5s;
+        }
+
+        .orb-3 {
+            top: 40%;
+            left: 60%;
+            width: 30vw;
+            height: 30vw;
+            background: rgba(92, 154, 255, 0.1);
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(5%, 5%) scale(1.1); }
+        }
+
+        /* ==========================================================================
+           Typography
+           ========================================================================== */
+        .text-display {
+            font-family: var(--font-family-display);
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1.2;
+            margin-bottom: 24px;
+        }
+
+        .text-heading {
+            font-family: var(--font-family-display);
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.3;
+            margin-bottom: 20px;
+        }
+
+        .text-subheading {
+            font-size: clamp(1.1rem, 2vw, 1.3rem);
+            color: var(--color-text-secondary);
+            font-weight: 400;
+            letter-spacing: 0.01em;
+            line-height: 1.7;
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #ffffff 0%, rgba(255,255,255,0.7) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .text-accent {
+            background: linear-gradient(135deg, var(--color-accent-blue-light) 0%, var(--color-accent-cyan) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* ==========================================================================
+           Components
+           ========================================================================== */
+        .container {
+            max-width: var(--container-width);
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .section {
+            padding: var(--section-spacing) 0;
+            position: relative;
+        }
+
+        /* Glass Card */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 40px;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--glass-border-hover);
+        }
+
+        /* Buttons */
+        .btn-group {
+            display: flex;
+            gap: 16px;
+            margin-top: 48px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 18px 40px;
+            border-radius: 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--color-accent-blue) 0%, #1558c4 100%);
+            color: #ffffff;
+            box-shadow: 0 0 0 0 rgba(41, 121, 255, 0);
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, var(--color-accent-blue-light) 0%, var(--color-accent-blue) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        .btn-primary > span {
+            position: relative;
+            z-index: 2;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(41, 121, 255, 0.4);
+        }
+
+        .btn-primary:hover::before {
+            opacity: 1;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--color-text-primary);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--color-text-secondary);
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-2px);
+        }
+
+        /* Animations */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .fade-in-up.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ==========================================================================
+           Sections
+           ========================================================================== */
+        
+        /* 1. Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-top: 80px;
+            position: relative;
+        }
+
+        .hero-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+            width: 100%;
+        }
+
+        .hero-content {
+            flex: 1;
+            text-align: left;
+            z-index: 10;
+        }
+
+        .hero .btn-group {
+            justify-content: flex-start;
+        }
+        
+        .hero-image-wrapper {
+            flex: 1.2;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+        }
+
+        .hero-image {
+            width: 100%;
+            max-width: 600px;
+            border-radius: 16px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 30px rgba(41, 121, 255, 0.2);
+            border: 1px solid rgba(255,255,255,0.1);
+            transform: perspective(1000px) rotateY(-8deg) rotateX(4deg);
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .hero-image:hover {
+            transform: perspective(1000px) rotateY(0deg) rotateX(0deg);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            opacity: 0.5;
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-indicator span {
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .scroll-indicator .line {
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, #ffffff, transparent);
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translate(-50%, 0); }
+            40% { transform: translate(-50%, -10px); }
+            60% { transform: translate(-50%, -5px); }
+        }
+
+        /* 2. Empathy Section */
+        .empathy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 60px;
+        }
+
+        .empathy-card {
+            padding: 32px;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        .empathy-icon {
+            color: var(--color-accent-blue-light);
+            font-size: 1.5rem;
+            line-height: 1;
+        }
+
+        .empathy-text {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        /* 3. AI Era Section */
+        .ai-era {
+            text-align: center;
+        }
+
+        .ai-era-content {
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .parallax-element {
+            position: absolute;
+            z-index: -1;
+            opacity: 0.1;
+            filter: blur(2px);
+        }
+
+        .pe-1 { top: -20%; left: -10%; font-size: 8rem; font-weight: 800; transform: rotate(-10deg); }
+        .pe-2 { bottom: -10%; right: -5%; font-size: 6rem; font-weight: 800; transform: rotate(15deg); }
+
+        /* 4. Benefits Section */
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 32px;
+            margin-top: 60px;
+        }
+
+        .benefit-card {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            height: 100%;
+        }
+
+        .benefit-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .benefit-card p {
+            color: var(--color-text-secondary);
+            font-size: 1rem;
+        }
+
+        .benefit-number {
+            font-family: var(--font-family-display);
+            font-size: 3rem;
+            font-weight: 800;
+            color: rgba(255,255,255,0.1);
+            line-height: 1;
+            margin-bottom: auto;
+        }
+
+        /* 5. Before/After Section */
+        .comparison-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        @media (min-width: 768px) {
+            .comparison-wrapper {
+                flex-direction: row;
+                align-items: stretch;
+            }
+        }
+
+        .comp-side {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .comp-label {
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: var(--color-text-secondary);
+            text-align: center;
+        }
+
+        .comp-window {
+            background: #0a0c14;
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.05);
+            overflow: hidden;
+            height: 300px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .window-header {
+            height: 32px;
+            background: rgba(255,255,255,0.03);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+        }
+
+        .window-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 32px;
+            text-align: center;
+        }
+
+        /* Before Style */
+        .comp-side.before .window-body {
+            color: rgba(255,255,255,0.3);
+            font-family: serif;
+        }
+        
+        .comp-side.before .mock-title {
+            width: 60%;
+            height: 24px;
+            background: rgba(255,255,255,0.1);
+            margin-bottom: 16px;
+        }
+
+        .comp-side.before .mock-text {
+            width: 80%;
+            height: 12px;
+            background: rgba(255,255,255,0.05);
+            margin-bottom: 8px;
+        }
+
+        /* After Style */
+        .comp-side.after .window-body {
+            background: linear-gradient(135deg, rgba(41, 121, 255, 0.05) 0%, rgba(0, 229, 255, 0.05) 100%);
+        }
+
+        .comp-side.after .mock-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #fff;
+            letter-spacing: 0.05em;
+        }
+
+        .comp-side.after .mock-flex {
+            display: flex;
+            gap: 16px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .comp-side.after .mock-box {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .comp-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--color-text-secondary);
+        }
+        
+        @media (max-width: 767px) {
+            .comp-arrow {
+                transform: rotate(90deg);
+                padding: 16px 0;
+            }
+        }
+
+        /* 6. Target Section */
+        .target-list {
+            list-style: none;
+            max-width: 600px;
+            margin: 60px auto 0;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .target-item {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 24px 32px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+
+        .target-item:hover {
+            transform: translateX(10px);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .check-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--color-accent-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .check-icon::after {
+            content: '';
+            width: 6px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg) translate(-1px, -1px);
+        }
+
+        /* 7. Final CTA Section */
+        .cta {
+            text-align: center;
+            padding-bottom: 200px;
+        }
+
+        .cta-box {
+            position: relative;
+            padding: 80px 40px;
+            overflow: hidden;
+        }
+
+        .cta-box::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, rgba(41, 121, 255, 0.15) 0%, transparent 70%);
+            z-index: -1;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .hero-container {
+                flex-direction: column;
+                text-align: center;
+                gap: 60px;
+                padding-top: 60px;
+            }
+            .hero-content {
+                text-align: center;
+            }
+            .hero .btn-group {
+                justify-content: center;
+            }
+            .hero-image {
+                transform: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            :root {
+                --section-spacing: 100px;
+            }
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero-container {
+                padding-top: 40px;
+            }
+            .btn-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Ambient Background Effects -->
+    <div class="ambient-background">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <main>
+        <!-- 1. Hero Section -->
+        <section class="section hero">
+            <div class="container hero-container">
+                <div class="hero-content fade-in-up">
+                    <h1 class="text-display text-gradient">
+                        AIでホームページを<br>作れる時代。<br>
+                        でも、“頼み方”を知らない。
+                    </h1>
+                    <p class="text-subheading" style="margin-top: 32px;">
+                        プログラミング不要。<br>
+                        AIに<span class="text-accent">“伝わる言葉”</span>を学ぶだけで、<br>
+                        ホームページ制作は劇的に変わる。
+                    </p>
+                    <div class="btn-group">
+                        <a href="#about" class="btn btn-primary"><span>教材を見る</span></a>
+                        <a href="#" class="btn btn-secondary">noteで読む</a>
+                    </div>
+                </div>
+                <div class="hero-image-wrapper fade-in-up" style="transition-delay: 0.2s;">
+                    <img src="./hero-image.png.png" alt="AIでホームページを作りたい人の教科書" class="hero-image">
+                </div>
+            </div>
+            <div class="scroll-indicator fade-in-up" style="transition-delay: 0.5s;">
+                <span>Scroll</span>
+                <div class="line"></div>
+            </div>
+        </section>
+
+        <!-- 2. Empathy Section -->
+        <section id="empathy" class="section">
+            <div class="container">
+                <div class="fade-in-up">
+                    <h2 class="text-heading text-gradient">こんな経験、ありませんか？</h2>
+                </div>
+                <div class="empathy-grid">
+                    <div class="glass-card empathy-card fade-in-up" style="transition-delay: 0.1s;">
+                        <span class="empathy-icon">✦</span>
+                        <p class="empathy-text">AIに「ホームページ作って」と言ったけど、微妙なデザインしか出ない</p>
+                    </div>
+                    <div class="glass-card empathy-card fade-in-up" style="transition-delay: 0.2s;">
+                        <span class="empathy-icon">✦</span>
+                        <p class="empathy-text">具体的に何をどう指示すればいいのかわからない</p>
+                    </div>
+                    <div class="glass-card empathy-card fade-in-up" style="transition-delay: 0.3s;">
+                        <span class="empathy-icon">✦</span>
+                        <p class="empathy-text">プロンプトに出てくるWebの専門用語が難しくて挫折した</p>
+                    </div>
+                    <div class="glass-card empathy-card fade-in-up" style="transition-delay: 0.4s;">
+                        <span class="empathy-icon">✦</span>
+                        <p class="empathy-text">コードは一切書きたくない。でもAIは使いこなしたい</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. AI Era Section -->
+        <section id="ai-era" class="section ai-era">
+            <div class="container">
+                <div class="ai-era-content fade-in-up">
+                    <div class="parallax-element pe-1 text-accent">AI</div>
+                    <div class="parallax-element pe-2 text-accent">PROMPT</div>
+                    
+                    <h2 class="text-heading text-gradient">
+                        AIは作れる。<br>
+                        でも、“考えて”はくれない。
+                    </h2>
+                    <p class="text-subheading" style="margin-top: 32px;">
+                        現在のAIは、コードもデザインも瞬時に生成する能力を持っています。<br>
+                        しかし、あなたが「曖昧な指示」を出せば、「曖昧な結果」しか返ってきません。<br><br>
+                        AI時代において最も重要なスキル、それはプログラミングではありません。<br>
+                        あなたの頭の中にあるイメージを、AIが理解できる形に翻訳する<strong class="text-accent">“言語化”</strong>の力です。<br><br>
+                        そして、そのための共通言語こそが「Web用語」なのです。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Benefits Section -->
+        <section id="benefits" class="section">
+            <div class="container">
+                <div class="fade-in-up">
+                    <h2 class="text-heading text-gradient">この教材で得られる変化</h2>
+                    <p class="text-subheading">「AIに伝える力」を身につけることで、制作体験は一変します。</p>
+                </div>
+                
+                <div class="benefits-grid">
+                    <div class="glass-card benefit-card fade-in-up" style="transition-delay: 0.1s;">
+                        <div class="benefit-number">01</div>
+                        <h3>AIへの依頼が具体的になる</h3>
+                        <p>「かっこいいサイト」ではなく、レイアウトや配色、余白のルールなど、AIが迷わず出力できる明確な指示を出せるようになります。</p>
+                    </div>
+                    
+                    <div class="glass-card benefit-card fade-in-up" style="transition-delay: 0.2s;">
+                        <div class="benefit-number">02</div>
+                        <h3>Web制作の「構造」が見える</h3>
+                        <p>表面的なデザインだけでなく、裏側でWebサイトがどのように構成されているかの本質を理解できるため、修正指示も的確になります。</p>
+                    </div>
+                    
+                    <div class="glass-card benefit-card fade-in-up" style="transition-delay: 0.3s;">
+                        <div class="benefit-number">03</div>
+                        <h3>AI活用スピードが劇的に上がる</h3>
+                        <p>トライ＆エラーの回数が減り、一発で理想に近いデザインを引き出せるようになり、制作時間が大幅に短縮されます。</p>
+                    </div>
+                    
+                    <div class="glass-card benefit-card fade-in-up" style="transition-delay: 0.4s;">
+                        <div class="benefit-number">04</div>
+                        <h3>読んだ直後に実践できる</h3>
+                        <p>初心者向けに難しい専門用語を噛み砕いて解説。読み終えたその瞬間から、あなたのAIプロンプトは見違えるように洗練されます。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. Before/After Section -->
+        <section id="comparison" class="section">
+            <div class="container">
+                <div class="text-center fade-in-up" style="text-align: center;">
+                    <h2 class="text-heading text-gradient">指示の質が、デザインの質を決める</h2>
+                </div>
+
+                <div class="comparison-wrapper">
+                    <!-- Before -->
+                    <div class="comp-side before fade-in-up" style="transition-delay: 0.1s;">
+                        <div class="comp-label">Before: 曖昧な指示</div>
+                        <div class="glass-card comp-window">
+                            <div class="window-header">
+                                <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+                            </div>
+                            <div class="window-body">
+                                <div class="mock-title"></div>
+                                <div class="mock-text"></div>
+                                <div class="mock-text" style="width: 60%"></div>
+                                <p style="margin-top: 16px; font-size: 0.9rem;">「なんかいい感じのサイト作って」<br>↓<br>結果：よくあるテンプレ感</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="comp-arrow fade-in-up" style="transition-delay: 0.2s;">
+                        ➔
+                    </div>
+
+                    <!-- After -->
+                    <div class="comp-side after fade-in-up" style="transition-delay: 0.3s;">
+                        <div class="comp-label text-accent">After: 具体的な指示</div>
+                        <div class="glass-card comp-window" style="border-color: rgba(0, 229, 255, 0.3);">
+                            <div class="window-header">
+                                <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+                            </div>
+                            <div class="window-body">
+                                <div class="mock-title">Hero Section</div>
+                                <div class="mock-flex">
+                                    <div class="mock-box"></div>
+                                    <div class="mock-box"></div>
+                                    <div class="mock-box"></div>
+                                </div>
+                                <p style="margin-top: 24px; font-size: 0.9rem; font-weight: 500;">共通言語を使った指示<br>↓<br>結果：洗練されたモダンデザイン</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. Target Section -->
+        <section id="target" class="section">
+            <div class="container">
+                <div class="text-center fade-in-up" style="text-align: center;">
+                    <h2 class="text-heading text-gradient">こんな方におすすめです</h2>
+                </div>
+                
+                <ul class="target-list">
+                    <li class="target-item fade-in-up" style="transition-delay: 0.1s;">
+                        <div class="check-icon"></div>
+                        <span>AIを使ってこれからWeb制作を始めたい初心者</span>
+                    </li>
+                    <li class="target-item fade-in-up" style="transition-delay: 0.2s;">
+                        <div class="check-icon"></div>
+                        <span>自分のサービスや商品のLPを自分で作りたい方</span>
+                    </li>
+                    <li class="target-item fade-in-up" style="transition-delay: 0.3s;">
+                        <div class="check-icon"></div>
+                        <span>プログラミングは未経験だが、AI時代に乗り遅れたくない方</span>
+                    </li>
+                    <li class="target-item fade-in-up" style="transition-delay: 0.4s;">
+                        <div class="check-icon"></div>
+                        <span>Webデザインの副業に興味があり、効率的に始めたい方</span>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 7. Final CTA Section -->
+        <section id="cta" class="section cta">
+            <div class="container">
+                <div class="glass-card cta-box fade-in-up">
+                    <h2 class="text-display text-gradient" style="font-size: clamp(2rem, 5vw, 3.5rem);">
+                        AI時代に必要なのは、<br>
+                        プログラミングではなく、<br>
+                        <span class="text-accent">“AIに伝える力”。</span>
+                    </h2>
+                    <div class="btn-group" style="justify-content: center; margin-top: 56px;">
+                        <a href="#" class="btn btn-primary" style="padding: 20px 60px; font-size: 1.2rem;">
+                            <span>今すぐ教材を見る</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer style="text-align: center; padding: 40px; color: var(--color-text-secondary); font-size: 0.9rem; border-top: 1px solid var(--glass-border);">
+        <p>&copy; AI時代のWeb制作 All rights reserved.</p>
+    </footer>
+
+    <!-- Intersection Observer for Scroll Animations -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.15
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        // オプション: 一度表示されたら監視を解除する場合
+                        // observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const fadeElements = document.querySelectorAll('.fade-in-up');
+            fadeElements.forEach(el => {
+                observer.observe(el);
+            });
+
+            // Parallax effect for AI Era section
+            const parallaxElements = document.querySelectorAll('.parallax-element');
+            window.addEventListener('scroll', () => {
+                const scrolled = window.pageYOffset;
+                parallaxElements.forEach((el, index) => {
+                    const speed = (index + 1) * 0.1;
+                    el.style.transform = `translateY(${scrolled * speed * 0.5}px) rotate(${index === 0 ? -10 : 15}deg)`;
+                });
+            });
+        });
+    </script>
+</body>
+</html>
